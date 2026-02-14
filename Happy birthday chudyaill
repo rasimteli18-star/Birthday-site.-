@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday💖!</my world merii ladakoo merii ronduuu 🫶
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/satoshi" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff4d91 0%, #ff1a1a 100%);
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #0c0a09;
+            color: #f8fafc;
+            font-family: 'Satoshi', sans-serif;
+        }
+
+        /* Animated Aurora Background Layer 1 */
+        #aurora-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at 20% 30%, hsla(333, 70%, 55%, 0.4) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, hsla(282, 82%, 54%, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 50% 50%, hsla(210, 89%, 60%, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 10% 80%, hsla(35, 90%, 60%, 0.3) 0%, transparent 50%);
+            filter: blur(80px);
+            animation: aurora-flow 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes aurora-flow {
+            0% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.2) translate(5%, 5%); }
+            100% { transform: scale(1.1) translate(-5%, 2%); }
+        }
+
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(12, 10, 9, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -40%);
+        }
+
+        .glass-card.active {
+            display: block;
+        }
+
+        h1, h2 {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(to right, #f8fafc, #fda4af, #f8fafc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: var(--primary-gradient);
+            box-shadow: 0 0 20px rgba(255, 77, 145, 0.4);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 12px 32px;
+            border-radius: 9999px;
+            font-weight: 600;
+            color: white;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.08) translateY(-3px);
+            box-shadow: 0 0 30px rgba(255, 77, 145, 0.6);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.95);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        #progress-fill {
+            width: 20%;
+            height: 100%;
+            background: var(--primary-gradient);
+            transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        /* Bento Grid */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 1.5rem;
+        }
+
+        .bento-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 16px;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .col-span-2 { grid-column: span 2; }
+
+        /* Polaroid */
+        .polaroid-wrapper {
+            perspective: 1000px;
+            margin: 1.5rem 0;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 12px 12px 40px 12px;
+            transform: rotate(-3deg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.1s ease;
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: #eee;
+        }
+
+        .polaroid p {
+            font-family: 'Playfair Display', serif;
+            color: #333;
+            margin-top: 12px;
+            font-size: 1.2rem;
+        }
+
+        .emoji-pulse {
+            font-size: 4rem;
+            animation: pulse 2s infinite;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(255, 77, 145, 0)); }
+            50% { transform: scale(1.15); filter: drop-shadow(0 0 20px rgba(255, 77, 145, 0.6)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(255, 77, 145, 0)); }
+        }
+
+        #finale-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            display: none;
+            color: #fda4af;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="aurora-bg"></div>
+    <canvas id="three-canvas"></canvas>
+
+    <div class="progress-container">
+        <div id="progress-fill"></div>
+    </div>
+
+    <div class="glass-card active" id="step-1">
+        <span class="emoji-pulse">❤️</span>
+        <h1 class="text-4xl mb-4">Hey dyan,</h1>
+        <p class="text-gray-300 mb-8">I built a little world for you, just to bring a smile to your face on your special day.</p>
+        <button class="btn-primary" onclick="nextStep(2)">Let's Begin</button>
+    </div>
+
+    <div class="glass-card" id="step-2">
+        <span class="emoji-pulse">🎉</span>
+        <h1 class="text-4xl mb-4">Happy Birthday!</h1>
+        <p class="text-gray-300 mb-8">Another year of you making the world brighter. Your existence is a gift, and I'm so lucky to witness it.</p>
+        <button class="btn-primary" onclick="nextStep(3)">There's more...</button>
+    </div>
+
+    <div class="glass-card" id="step-3" style="max-width: 600px;">
+        <h2 class="text-3xl mb-4">A Few Things I Adore</h2>
+        <div class="bento-grid">
+            <div class="bento-item col-span-2">
+                <h3 class="text-pink-300 font-bold">✨ Your Unmatched Kindness</h3>
+                <p class="text-xs text-gray-400 mt-1">The genuine warmth you show to everyone is something truly rare.</p>
+            </div>
+            <div class="bento-item">
+                <h3 class="text-pink-300 font-bold">😊 That Smile</h3>
+                <p class="text-xs text-gray-400 mt-1">It's a work of art.</p>
+            </div>
+            <div class="bento-item col-span-2">
+                <h3 class="text-pink-300 font-bold">🌟 Your Radiant Spirit</h3>
+                <p class="text-xs text-gray-400 mt-1">Being around you makes everything feel more exciting and possible.</p>
+            </div>
+        </div>
+        <button class="btn-primary mt-8" onclick="nextStep(4)">Remember this?</button>
+    </div>
+
+    <div class="glass-card" id="step-4">
+        <h2 class="text-3xl mb-2">That One Time...</h2>
+        <div class="polaroid-wrapper">
+            <div class="polaroid" id="polaroid">
+                <img src="https://i.ibb.co/6Z6XgCg/crush.webp" alt="Memory">
+                <p>Our favorite memory.</p>
+            </div>
+        </div>
+        <p class="text-gray-300 mb-6 text-sm">Every moment with you feels like a scene from a movie I'd watch on repeat.</p>
+        <button class="btn-primary" onclick="nextStep(5)">One last thing...</button>
+    </div>
+
+    <div class="glass-card" id="step-5">
+        <span class="emoji-pulse">🎂</span>
+        <h2 class="text-3xl mb-4">My Wish For You</h2>
+        <p class="text-gray-300 mb-6">May the next year bring you all the love, success, and pure happiness you so rightfully deserve. May your dreams soar higher than ever.</p>
+        <div id="finale-text">Happy Birthday, meri boothni! ❤️</div>
+        <button class="btn-primary" id="celebrate-btn" onclick="startFinale()">Celebrate!</button>
+    </div>
+
+    <script>
+        // --- Three.js Background Logic ---
+        let scene, camera, renderer, hearts = [];
+        const heartGroup = new THREE.Group();
+
+        function initThree() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);index.html
+            const pointLight = new THREE.PointLight(0xff4d91, 1);
+            pointLight.position.set(10, 10, 10);
+            scene.add(pointLight);
+
+            // Simple Heart Shape
+            const x = 0, y = 0;
+            const heartShape = new THREE.Shape();
+            heartShape.moveTo( x + 5, y + 5 );
+            heartShape.bezierCurveTo( x + 5, y + 5, x + 4, y, x, y );
+            heartShape.bezierCurveTo( x - 6, y, x - 6, y + 7,x - 6, y + 7 );
+            heartShape.bezierCurveTo( x - 6, y + 11, x - 3, y + 15.4, x + 5, y + 19 );
+            heartShape.bezierCurveTo( x + 12, y + 15.4, x + 16, y + 11, x + 16, y + 7 );
+            heartShape.bezierCurveTo( x + 16, y + 7, x + 16, y, x + 10, y );
+            heartShape.bezierCurveTo( x + 7, y, x + 5, y + 5, x + 5, y + 5 );
+
+            const geometry = new THREE.ExtrudeGeometry(heartShape, { depth: 2, bevelEnabled: true, bevelThickness: 1, bevelSize: 1 });
+            const material = new THREE.MeshPhongMaterial({ color: 0xff4d91, shininess: 100 });
+
+            for (let i = 0; i < 25; i++) {
+                const heart = new THREE.Mesh(geometry, material);
+                heart.position.set(
+                    (Math.random() - 0.5) * 100,
+                    (Math.random() - 0.5) * 60,
+                    (Math.random() - 0.5) * 50
+                );
+                heart.rotation.z = Math.PI;
+                heart.scale.set(0.1, 0.1, 0.1);
+                heart.userData = {
+                    speed: 0.005 + Math.random() * 0.01,
+                    angle: Math.random() * Math.PI * 2
+                };
+                hearts.push(heart);
+                heartGroup.add(heart);
+            }
+            scene.add(heartGroup);
+            camera.position.z = 50;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            hearts.forEach(h => {
+                h.position.y += Math.sin(Date.now() * 0.001 + h.userData.angle) * 0.02;
+                h.rotation.y += 0.01;
+            });
+            renderer.render(scene, camera);
+        }
+
+        // --- Navigation Logic ---
+        let currentStep = 1;
+
+        function nextStep(step) {
+            const currentCard = document.getElementById(`step-${currentStep}`);
+            const nextCard = document.getElementById(`step-${step}`);
+            
+            gsap.to(currentCard, {
+                opacity: 0,
+                y: -20,
+                duration: 0.5,
+                onComplete: () => {
+                    currentCard.style.display = 'none';
+                    nextCard.style.display = 'block';
+                    gsap.fromTo(nextCard, 
+                        { opacity: 0, y: 30 }, 
+                        { opacity: 1, y: 0, duration: 0.6, ease: "back.out(1.7)" }
+                    );
+                    currentStep = step;
+                    document.getElementById('progress-fill').style.width = `${(step/5) * 100}%`;
+                }
+            });
+        }
+
+        // --- Step 4 Polaroid Interaction ---
+        const polaroid = document.getElementById('polaroid');
+        document.addEventListener('mousemove', (e) => {
+            if (currentStep === 4) {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                polaroid.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg) rotate(-3deg)`;
+            }
+        });
+
+        // --- Finale Logic ---
+        function startFinale() {
+            const btn = document.getElementById('celebrate-btn');
+            const finaleText = document.getElementById('finale-text');
+            
+            btn.style.pointerEvents = 'none';
+            gsap.to(btn, { opacity: 0, scale: 0.8, duration: 0.3 });
+            
+            setTimeout(() => {
+                finaleText.style.display = 'block';
+                gsap.from(finaleText, { opacity: 0, y: 20, duration: 1 });
+            }, 400);
+
+            // Confetti
+            const duration = 5 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 3,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0, y: 0.8 },
+                    colors: ['#ff4d91', '#ff1a1a', '#ffffff']
+                });
+                confetti({
+                    particleCount: 3,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1, y: 0.8 },
+                    colors: ['#ff4d91', '#ff1a1a', '#ffffff']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+
+            // Emoji Shower8645c0134872a6ab8687f6f01055d855ed2e1d0b
+            const scalar = 2;
+            const heartIcon = confetti.shapeFromText({ text: '❤️', scalar });
+            const sparkIcon = confetti.shapeFromText({ text: '✨', scalar });
+
+            confetti({
+                shapes: [heartIcon, sparkIcon],
+                particleCount: 40,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+
+            // Heart Exit
+            hearts.forEach((h, i) => {
+                gsap.to(h.position, {
+                    x: h.position.x * 5,
+                    y: 100,
+                    z: h.position.z + 50,
+                    duration: 3,
+                    delay: i * 0.05,
+                    ease: "power2.in"
+                });
+                gsap.to(h.scale, { x: 0, y: 0, z: 0, duration: 3, delay: i * 0.05 });
+            });
+        }
+
+        // Init
+        window.onload = () => {
+            initThree();
+            animate();
+            gsap.to("#step-1", { opacity: 1, y: 0, duration: 1, delay: 0.5 });
+        };
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
